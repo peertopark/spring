@@ -8,9 +8,8 @@
  * Created: 31-dic-2016
  */
 
-CREATE TABLE cars (
-    id INT NOT NULL PRIMARY KEY,
-    license_plate VARCHAR(10) NOT NULL,
+CREATE TABLE colors (
+    id INT(11) NOT NULL PRIMARY KEY,
     color VARCHAR(10) NOT NULL
 );
 
