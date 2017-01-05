@@ -9,11 +9,13 @@ import javax.sql.DataSource;
 import org.flywaydb.core.Flyway;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 /**
  *
  * @author Hector Espert
  */
+@Component
 public class MigrationManager extends Flyway implements InitializingBean {
 
     @Autowired

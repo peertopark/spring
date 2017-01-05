@@ -3,7 +3,6 @@
   <persistence-unit name="com.peertopark.spring.test" transaction-type="RESOURCE_LOCAL">
     <provider>org.eclipse.persistence.jpa.PersistenceProvider</provider>
     <properties>
-      <property name="javax.persistence.jdbc.driver" value="org.hsqldb.jdbcDriver"/>
       <property name="eclipselink.weaving" value="static"/>
     </properties>
   </persistence-unit>

@@ -4,7 +4,7 @@
     <parent>
         <groupId>com.peertopark.spring</groupId>
         <artifactId>parent</artifactId>
-        <version>1.0.1</version>
+        <version>1.0.2</version>
     </parent>
     <artifactId>data</artifactId>
     <packaging>jar</packaging>
@@ -49,9 +49,9 @@
             <scope>test</scope>
         </dependency>
         <dependency>
-            <groupId>org.hsqldb</groupId>
-            <artifactId>hsqldb</artifactId>
-            <version>2.3.3</version>
+            <groupId>com.h2database</groupId>
+            <artifactId>h2</artifactId>
+            <version>1.4.193</version>
             <scope>test</scope>
         </dependency>
         <dependency>
