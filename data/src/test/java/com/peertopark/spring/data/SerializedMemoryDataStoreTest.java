@@ -16,7 +16,6 @@
 package com.peertopark.spring.data;
 
 import com.peertopark.spring.data.test.objects.Car;
-import static org.hamcrest.MatcherAssert.assertThat;
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
@@ -24,6 +23,7 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 import static org.junit.Assert.*;
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.containsInAnyOrder;
 
 /**
  *
@@ -84,6 +84,52 @@ public class SerializedMemoryDataStoreTest {
         assertNotNull(savedCar);
         assertEquals(car, savedCar);
         assertNotEquals(car.parentHashCode(), savedCar.parentHashCode());
+    }
+    
+    @Test
+    public void testExistence() throws Exception {
+        Integer key = 1;
+        Car car = new Car(key);
+        assertFalse(dataStore.hasKey(key));
+        dataStore.save(key, car);
+        assertTrue(dataStore.hasKey(key));
+    }
+    
+    @Test
+    public void testSaveAndDelete() throws Exception {
+        Integer keyOne = 1;
+        Car carOne = new Car(keyOne);
+        Integer keyTwo = 2;
+        Car carTwo = new Car(keyTwo);
+        assertTrue(dataStore.retrieveAll().isEmpty());
+        dataStore.save(keyOne, carOne);
+        assertTrue(dataStore.hasKey(keyOne));
+        dataStore.save(keyTwo, carTwo);
+        assertTrue(dataStore.hasKey(keyTwo));
+        assertEquals(2, dataStore.retrieveAll().size());
+        Integer keyThree = 3;
+        dataStore.delete(keyThree);
+        assertEquals(2, dataStore.retrieveAll().size());
+        dataStore.delete(keyOne);
+        assertFalse(dataStore.hasKey(keyOne));
+        assertEquals(1, dataStore.retrieveAll().size());
+        dataStore.delete(keyTwo);
+        assertFalse(dataStore.hasKey(keyTwo));
+        assertTrue(dataStore.retrieveAll().isEmpty());
+    }
+    
+    @Test
+    public void testKeys() throws Exception {
+        Integer keyOne = 1;
+        Car carOne = new Car(keyOne);
+        dataStore.save(keyOne, carOne);
+        Integer keyTwo = 2;
+        Car carTwo = new Car(keyTwo);
+        dataStore.save(keyTwo, carTwo);
+        Integer keyThree = 3;
+        Car carThree = new Car(keyThree);
+        dataStore.save(keyThree, carThree);
+        assertThat(dataStore.keys(), containsInAnyOrder(1, 2, 3));
     }
 
 

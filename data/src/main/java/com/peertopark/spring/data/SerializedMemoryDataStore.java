@@ -47,5 +47,5 @@ public class SerializedMemoryDataStore<K extends Serializable, E extends Seriali
         LinkedList<E> linkedList = new LinkedList<>(super.retrieveAll());
         return SerializationUtils.clone(linkedList);
     }
-
+    
 }
