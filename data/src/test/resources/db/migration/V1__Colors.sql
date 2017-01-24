@@ -10,6 +10,6 @@
 
 CREATE TABLE colors (
     id INT(11) NOT NULL PRIMARY KEY,
-    color VARCHAR(10) NOT NULL
+    name VARCHAR(10) NOT NULL
 );
 
