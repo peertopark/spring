@@ -16,12 +16,16 @@
 package com.peertopark.spring.data;
 
 import javax.sql.DataSource;
+import org.apache.commons.dbcp2.BasicDataSource;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.DependsOn;
 import org.springframework.orm.jpa.AbstractEntityManagerFactoryBean;
+import org.springframework.orm.jpa.JpaDialect;
 import org.springframework.orm.jpa.JpaTransactionManager;
 import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
 import org.springframework.orm.jpa.vendor.AbstractJpaVendorAdapter;
+import org.springframework.orm.jpa.vendor.EclipseLinkJpaDialect;
 import org.springframework.orm.jpa.vendor.EclipseLinkJpaVendorAdapter;
 import org.springframework.transaction.PlatformTransactionManager;
 
@@ -29,11 +33,26 @@ import org.springframework.transaction.PlatformTransactionManager;
  *
  * @author Hector Espert
  */
-public abstract class SpringDataConfig {
+public class SpringDataConfig {
+
+    private DataSourceConfig dataSourceConfig;
+
+    @Autowired(required = false)
+    public void setDataSourceConfig(DataSourceConfig dataSourceConfig) {
+        this.dataSourceConfig = dataSourceConfig;
+    }
     
-    
+
     @Bean
-    public abstract DataSource dataSource();
+    public DataSource dataSource() {
+        BasicDataSource dataSource = new BasicDataSource();
+        dataSource.setUrl(dataSourceConfig.getJDBCUrl());
+        dataSource.setUsername(dataSourceConfig.getJDBCUser());
+        dataSource.setPassword(dataSourceConfig.getJDBCPassword());
+        dataSource.setDriverClassName(dataSourceConfig.getJDBCDriver());
+        dataSource.setMaxTotal(dataSourceConfig.getMaxConnections());
+        return dataSource;
+    }
     
     @Bean
     @DependsOn("migrationManager")
@@ -41,6 +60,7 @@ public abstract class SpringDataConfig {
         LocalContainerEntityManagerFactoryBean entityManagerFactoryBean = new LocalContainerEntityManagerFactoryBean();
         entityManagerFactoryBean.setDataSource(dataSource());
         entityManagerFactoryBean.setJpaVendorAdapter(jpaVendorAdapter());
+        entityManagerFactoryBean.setJpaDialect(jpaDialect());
         return entityManagerFactoryBean;
     }
     
@@ -51,7 +71,9 @@ public abstract class SpringDataConfig {
     
     @Bean
     public PlatformTransactionManager transactionManager() {
-        return new JpaTransactionManager();
+        JpaTransactionManager transactionManager = new JpaTransactionManager();
+        transactionManager.setJpaDialect(jpaDialect());
+        return transactionManager;
     }
     
     @Bean
@@ -59,4 +81,12 @@ public abstract class SpringDataConfig {
         return new MigrationManager();
     }
     
+    
+    @Bean
+    public JpaDialect jpaDialect() {
+        EclipseLinkJpaDialect jpaDialect = new EclipseLinkJpaDialect();
+        jpaDialect.setLazyDatabaseTransaction(true);
+        return jpaDialect;
+    }
+
 }
