@@ -147,4 +147,11 @@ public class UriBuilderTest {
         assertEquals(expected, uri);  
     }
     
+    @Test
+    public void testInitBuild() throws Exception {
+        String result = UriBuilder.init().setScheme("http").setHost("www.peertopark.com").setPath("/test").addParameter("key", "value").buildToString();
+        assertNotNull(result);
+        assertEquals("http://www.peertopark.com/test?key=value", result);
+    }
+    
 }
