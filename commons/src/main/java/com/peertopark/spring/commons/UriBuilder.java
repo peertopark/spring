@@ -54,6 +54,11 @@ public class UriBuilder extends URIBuilder {
     }
 
     @Override
+    public UriBuilder setParameter(String param, String value) {
+        return (UriBuilder) super.setParameter(param, value); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
     public URI build() throws URISyntaxException {
         return super.build();
     }
@@ -61,8 +66,20 @@ public class UriBuilder extends URIBuilder {
     public String buildToString() throws URISyntaxException {
         return super.build().toString();
     } 
-    
-    
-    
-    
+
+    @Override
+    public UriBuilder setScheme(String scheme) {
+        return (UriBuilder) super.setScheme(scheme);
+    }
+
+    @Override
+    public UriBuilder setHost(String host) {
+        return (UriBuilder) super.setHost(host); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public UriBuilder setPath(String path) {
+        return (UriBuilder) super.setPath(path); //To change body of generated methods, choose Tools | Templates.
+    }
+
 }
