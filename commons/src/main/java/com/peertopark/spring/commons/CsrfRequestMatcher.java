@@ -46,4 +46,8 @@ public class CsrfRequestMatcher implements RequestMatcher {
         return requestMatcher.matches(httpServletRequest);
     }
     
+    public static CsrfRequestMatcher match(String pattern) {
+        return new CsrfRequestMatcher(pattern);
+    }
+    
 }
