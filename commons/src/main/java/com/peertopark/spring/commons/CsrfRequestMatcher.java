@@ -15,6 +15,8 @@
  */
 package com.peertopark.spring.commons;
 
+import java.util.ArrayList;
+import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
@@ -26,11 +28,12 @@ import org.springframework.security.web.util.matcher.RequestMatcher;
  */
 public class CsrfRequestMatcher implements RequestMatcher {
     
-    private final AntPathRequestMatcher requestMatcher;
+    
+    private List<RequestMatcher> matchers;
     
     
     public CsrfRequestMatcher(String pattern, String httpMethod) {
-        requestMatcher = new AntPathRequestMatcher(pattern, httpMethod);
+        this(new AntPathRequestMatcher(pattern, httpMethod));
     }
     
     public CsrfRequestMatcher(String pattern, HttpMethod httpMethod) {
@@ -38,12 +41,48 @@ public class CsrfRequestMatcher implements RequestMatcher {
     }
     
     public CsrfRequestMatcher(String pattern) {
-        this(pattern, HttpMethod.POST.name());
+        this(pattern, HttpMethod.POST);
+    }
+    
+    protected CsrfRequestMatcher(RequestMatcher requestMatcher) {
+        this();
+        this.matchers.add(requestMatcher);
+    }
+    
+    public CsrfRequestMatcher() {
+        this.matchers = new ArrayList<>();
     }
 
     @Override
     public boolean matches(HttpServletRequest httpServletRequest) {
-        return requestMatcher.matches(httpServletRequest);
+        for (RequestMatcher matcher : matchers) {
+            if (matcher.matches(httpServletRequest)) {
+                return true;
+            }
+        }
+        return false;
     }
     
+    public static CsrfRequestMatcher matchPost(String pattern) {
+        return new CsrfRequestMatcher(pattern);
+    }
+    
+    
+    public CsrfRequestMatcher andMatchPost(String pattern) {
+        return andMatch(pattern, HttpMethod.POST);
+    }
+    
+    public CsrfRequestMatcher andMatch(String pattern, HttpMethod httpMethod) {
+        return andMatch(pattern, httpMethod.name());
+    }
+    
+    public CsrfRequestMatcher andMatch(String pattern, String httpMethod) {
+        RequestMatcher requestMatcher = new AntPathRequestMatcher(pattern, httpMethod);
+        return addRequestMatcher(requestMatcher);
+    }
+    
+    public CsrfRequestMatcher addRequestMatcher(RequestMatcher requestMatcher) {
+        this.matchers.add(requestMatcher);
+        return this;
+    }
 }
