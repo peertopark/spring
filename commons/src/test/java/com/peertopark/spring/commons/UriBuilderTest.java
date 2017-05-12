@@ -154,4 +154,12 @@ public class UriBuilderTest {
         assertEquals("http://www.peertopark.com/test?key=value", result);
     }
     
+    @Test
+    public void appendPathTest() throws Exception {
+        String url = "http://www.peertopark.com";
+        String result = UriBuilder.fromUriString(url).setPath("/test").appendPath("/append").buildToString();
+        assertNotNull(result);
+        assertEquals("http://www.peertopark.com/test/append", result);
+    }
+    
 }
