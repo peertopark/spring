@@ -74,12 +74,18 @@ public class UriBuilder extends URIBuilder {
 
     @Override
     public UriBuilder setHost(String host) {
-        return (UriBuilder) super.setHost(host); //To change body of generated methods, choose Tools | Templates.
+        return (UriBuilder) super.setHost(host);
     }
 
     @Override
     public UriBuilder setPath(String path) {
-        return (UriBuilder) super.setPath(path); //To change body of generated methods, choose Tools | Templates.
+        return (UriBuilder) super.setPath(path);
+    }
+    
+    public UriBuilder appendPath(String path) {
+        String currentPath = super.getPath();
+        String updatedPath = currentPath.concat(path);
+        return (UriBuilder) super.setPath(updatedPath);
     }
 
 }
