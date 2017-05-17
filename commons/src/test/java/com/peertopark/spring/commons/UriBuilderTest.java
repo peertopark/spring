@@ -15,6 +15,7 @@
  */
 package com.peertopark.spring.commons;
 
+import com.peertopark.java.commons.enums.Scheme;
 import java.net.URI;
 import java.net.URISyntaxException;
 import org.junit.After;
@@ -134,7 +135,6 @@ public class UriBuilderTest {
         assertEquals("https://www.google.es?returnUrl=https%3A%2F%2Fwww.google.es", anotherUrlValue);
         
         String resultUrl = UriBuilder.fromUriString(url).addParameter(param, anotherUrlValue).addParameter("test", "true").buildToString();
-        System.out.println(resultUrl);
         assertEquals("https://www.google.es?returnUrl=https%3A%2F%2Fwww.google.es%3FreturnUrl%3Dhttps%253A%252F%252Fwww.google.es&test=true", resultUrl);
     }
     
@@ -161,5 +161,25 @@ public class UriBuilderTest {
         assertNotNull(result);
         assertEquals("http://www.peertopark.com/test/append", result);
     }
+    
+    @Test
+    public void setParameterTest() throws Exception {
+        String url = "https://www.peertopark.com";
+        String result = UriBuilder.fromUriString(url).setParameter("key", "value").buildToString();
+        assertNotNull(result);
+        assertEquals("https://www.peertopark.com?key=value", result);
+    }
+    
+    @Test
+    public void initAndSetParameterTest() throws Exception {
+        String result = UriBuilder.init()
+                .setScheme(Scheme.HTTPS)
+                .setHost("www.peertopark.com")
+                //.setPath("")
+                .setParameter("key", "value").buildToString();
+        assertNotNull(result);
+        assertEquals("https://www.peertopark.com?key=value", result);
+    }
+    
     
 }

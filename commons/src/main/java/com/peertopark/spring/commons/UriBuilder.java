@@ -15,6 +15,8 @@
  */
 package com.peertopark.spring.commons;
 
+import com.peertopark.java.commons.enums.Scheme;
+import com.peertopark.java.commons.utilities.Objects;
 import java.net.URI;
 import java.net.URISyntaxException;
 import org.apache.http.client.utils.URIBuilder;
@@ -35,15 +37,15 @@ public class UriBuilder extends URIBuilder {
     public UriBuilder(URI uri) {
         super(uri);
     }
-    
+
     public static UriBuilder init() {
         return new UriBuilder();
     }
-    
-    public static UriBuilder fromUriString(String uri) throws URISyntaxException{
+
+    public static UriBuilder fromUriString(String uri) throws URISyntaxException {
         return new UriBuilder(uri);
     }
-    
+
     public static UriBuilder fromUri(URI uri) {
         return new UriBuilder(uri);
     }
@@ -55,7 +57,7 @@ public class UriBuilder extends URIBuilder {
 
     @Override
     public UriBuilder setParameter(String param, String value) {
-        return (UriBuilder) super.setParameter(param, value); //To change body of generated methods, choose Tools | Templates.
+        return (UriBuilder) super.setParameter(param, value);
     }
 
     @Override
@@ -64,12 +66,20 @@ public class UriBuilder extends URIBuilder {
     }
 
     public String buildToString() throws URISyntaxException {
-        return super.build().toString();
-    } 
+        return build().toString();
+    }
 
     @Override
     public UriBuilder setScheme(String scheme) {
         return (UriBuilder) super.setScheme(scheme);
+    }
+
+    public UriBuilder setScheme(Scheme scheme) {
+        if (Objects.nonNull(scheme)) {
+            return (UriBuilder) super.setScheme(scheme.getValue());
+        } else {
+            return this;
+        }
     }
 
     @Override
@@ -81,7 +91,7 @@ public class UriBuilder extends URIBuilder {
     public UriBuilder setPath(String path) {
         return (UriBuilder) super.setPath(path);
     }
-    
+
     public UriBuilder appendPath(String path) {
         String currentPath = super.getPath();
         String updatedPath = currentPath.concat(path);
